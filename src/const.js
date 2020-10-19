@@ -1,6 +1,3 @@
-export const randomInteger = (min, max) => {
-    return min + Math.floor(Math.random() * (max - min));
-};
 
 const TEXT_LOREM = [
     `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
@@ -125,4 +122,8 @@ export const getOneRandomArray = (array) => {
         randomArray[index] = array[randomInteger(0, array.length-1)];
     };
     return randomArray;
+};
+
+export const randomInteger = (min, max) => {
+    return min + Math.floor(Math.random() * (max - min));
 };
