@@ -1,9 +1,16 @@
-import {randomInteger} from "../const.js";
+import { randomInteger } from "../const.js";
 
-const navigatorMarcupGenerate = () => [{
-    number1: randomInteger(2,5),
-    number2: randomInteger(10,20),
-    number3: randomInteger(4,10),
-}];
+const navigatorMarcupGenerate = () => {
+    return [{
+        name: `Watchlist`,
+        number: randomInteger(2, 5),
+    }, {
+        name: `History`,
+        number: randomInteger(10, 20),
+    }, {
+        name: `Favorites`,
+        number: randomInteger(4, 10),
+    }];
+};
 
 export {navigatorMarcupGenerate};
