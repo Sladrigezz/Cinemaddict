@@ -5,7 +5,9 @@ const RenderPosition = {
 
 const createElement = (template) => {
   const newElement = document.createElement(`div`);
-  newElement.innerHTML = template
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
 }
 
 const render = (container, element, place) => {
@@ -14,7 +16,7 @@ const render = (container, element, place) => {
       container.prepend(element);
       break;
     case RenderPosition.BEFOREEND:
-      container.prepend(element);
+      container.append(element);
       break;
   }
 }

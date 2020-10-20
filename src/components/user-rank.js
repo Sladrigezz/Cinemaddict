@@ -32,19 +32,22 @@ const createUserRankTemplate = (watchedMoviesCount) => {
 
 export default class UserRank {
   constructor(watchedMoviesCount) {
-    this._watchedMoviesCount = watchedMoviesCount
+    this._watchedMoviesCount = watchedMoviesCount;
+    this._element = null;
   }
 
   getTemplate() {
-    return createUserRankTemplate();
+    return createUserRankTemplate(this._watchedMoviesCount);
   }
 
   getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
-    return this._element
+
+    return this._element;
   }
+
   removeElement() {
     this._element = null;
   }
