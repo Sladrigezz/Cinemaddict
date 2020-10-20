@@ -102,8 +102,17 @@ if (commentsSum > 0) {
   renderCardsAmount(sortedFilmCardsByCommentCount, 0, SHOWING_FILM_CARD_COUNT_BY_EXTRA, mostCommentedContainerElements);
 }
 
+const popupOpen = document.querySelectorAll(`.film-card__poster`);
 const popupClose = document.querySelector(`.film-details__close`);
 const popup = document.querySelector(`.film-details`);
+
+popup.classList.add(`visually-hidden`)
 popupClose.addEventListener('click', () => {
   popup.classList.add(`visually-hidden`)
 })
+
+popupOpen.forEach(element => {
+  element.addEventListener('click', () => {
+    popup.classList.remove(`visually-hidden`)
+  })
+});
