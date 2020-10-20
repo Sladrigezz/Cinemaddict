@@ -1,3 +1,5 @@
+import { createElement } from '../utils.js';
+
 const userRanks = [
   {
     userRank: ``,
@@ -17,10 +19,10 @@ const userRanks = [
   },
 ];
 
-const getUserRank = (watchedMovies) => userRanks.find(({check}) => check(watchedMovies));
+const getUserRank = (watchedMovies) => userRanks.find(({ check }) => check(watchedMovies));
 
 const createUserRankTemplate = (watchedMoviesCount) => {
-  const {userRank} = getUserRank(watchedMoviesCount);
+  const { userRank } = getUserRank(watchedMoviesCount);
 
   return `<section class="header__profile profile">
     <p class="profile__rating">${userRank}</p>
@@ -28,4 +30,22 @@ const createUserRankTemplate = (watchedMoviesCount) => {
   </section>`;
 };
 
-export {createUserRankTemplate};
+export default class UserRank {
+  constructor(watchedMoviesCount) {
+    this._watchedMoviesCount = watchedMoviesCount
+  }
+
+  getTemplate() {
+    return createUserRankTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

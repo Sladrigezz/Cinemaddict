@@ -8,4 +8,26 @@ Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc an
 Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. 
 Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
-export {text};
+const filmTitles = [
+    `Made For Each Other`,
+    `Popeye Meets Sinbad`,
+    `Sagebrush Trail`,
+    `Santa Claus Conquers The Martians`,
+    `The Dance Of Life`,
+    `The Great Flamarion`,
+    `The Man With The Golden Arm`,
+];
+
+const genres = [
+    `Action`,
+    `Cartoon`,
+    `Comedy`,
+    `Crime`,
+    `Drama`,
+    `Fantasy`,
+    `Musical`,
+    `Romance`,
+    `Western`,
+];
+
+export { text, filmTitles, genres };
