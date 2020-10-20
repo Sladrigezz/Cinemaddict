@@ -52,6 +52,7 @@ const getFileName = (title) => title
   .join(`-`);
 
 export {
+  RenderPosition,
   createElement,
   render,
   getRandomArbitrary,
