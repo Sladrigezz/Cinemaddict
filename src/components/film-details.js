@@ -1,6 +1,6 @@
 import { formatDuration, getFileName, createElement } from './../utils';
 
-const createFilmDetailsTemplate = (film) => {
+const createFilmPopupTemplate = (film) => {
   const {
     title,
     rate,
@@ -183,14 +183,14 @@ const createFilmDetailsTemplate = (film) => {
   </section>`;
 };
 
-export default class FilmDetails {
+export default class FilmPopup{
   constructor(film) {
     this._film = film;
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film);
+    return createFilmPopupTemplate(this._film);
   }
 
   getElement() {
