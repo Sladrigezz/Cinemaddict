@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import { createElement } from '../utils.js';
 
 const createMainNavigationTemplate = (watchListCount, watchedCount, favoriteCount) =>
   `<nav class="main-navigation">
@@ -9,25 +9,24 @@ const createMainNavigationTemplate = (watchListCount, watchedCount, favoriteCoun
     <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
   </nav>`;
 
-  export default class MainNavigation {
-    constructor(watchListCount, watchedCount, favoriteCount) {
-      this._watchListCount = watchListCount
-      this._watchedCount = watchedCount
-      this._favoriteCount = favoriteCount
-      this._element = null;
-    }
-    getTemplate() {
-      return createMainNavigationTemplate(this._watchListCount, this._watchedCount, this._favoriteCount);
-    }
-  
-    getElement() {
-      if (!this._element) {
-        this._element = createElement(this.getTemplate());
-      }
-      return this._element;
-    }
-    removeElement() {
-      this._element = null;
-    }
+export default class MainNavigation {
+  constructor(watchListCount, watchedCount, favoriteCount) {
+    this._watchListCount = watchListCount
+    this._watchedCount = watchedCount
+    this._favoriteCount = favoriteCount
+    this._element = null;
   }
-  
+  getTemplate() {
+    return createMainNavigationTemplate(this._watchListCount, this._watchedCount, this._favoriteCount);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}
