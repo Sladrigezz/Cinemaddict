@@ -54,7 +54,6 @@ const renderFilm = (filmElement, film) => {
 // Генерация 20-ти фильмов (FILM_CARD_COUNT)
 const filmCards = generateFilmCards(FILM_CARD_COUNT);
 
-const filmsListExtraTitles = [`Top rated`, `Most commented`];
 
 const filmsWatchList = filmCards.filter(({ isInWatchlist }) => isInWatchlist);
 const filmsWatched = filmCards.filter(({ isWatched }) => isWatched);
@@ -114,6 +113,8 @@ showMoreButton.addEventListener(`click`, () => {
 
 
 // Рендер и показ двух фильмов с максимальными оценками
+const filmsListExtraTitles = [`Top rated`, `Most commented`];
+
 render(filmsElement, new FilmListExtraComponent(filmsListExtraTitles[0]).getElement(), RenderPosition.BEFOREEND);
 
 const sortedFilmCardsByRate = filmCards.slice().sort((a, b) => {
