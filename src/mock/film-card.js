@@ -1,32 +1,10 @@
-import {text} from './../const';
+import { text, filmTitles, genres } from './../const';
 import {
   getRandomArbitrary,
   getRandomIntInclusive,
   getRandomArrayItem,
   getRandomBooleanValue,
 } from './../utils';
-
-const filmTitles = [
-  `Made For Each Other`,
-  `Popeye Meets Sinbad`,
-  `Sagebrush Trail`,
-  `Santa Claus Conquers The Martians`,
-  `The Dance Of Life`,
-  `The Great Flamarion`,
-  `The Man With The Golden Arm`,
-];
-
-const genres = [
-  `Action`,
-  `Cartoon`,
-  `Comedy`,
-  `Crime`,
-  `Drama`,
-  `Fantasy`,
-  `Musical`,
-  `Romance`,
-  `Western`,
-];
 
 
 const generateDescription = () => {
@@ -71,4 +49,4 @@ const generateFilmCards = (count) => {
   return result;
 };
 
-export {generateFilmCard, generateFilmCards};
+export { generateFilmCard, generateFilmCards };
