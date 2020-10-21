@@ -1,4 +1,5 @@
-import { createElement } from '../utils.js';
+import AbstractComponent from './abstract-component';
+
 
 const userRanks = [
   {
@@ -19,10 +20,10 @@ const userRanks = [
   },
 ];
 
-const getUserRank = (watchedMovies) => userRanks.find(({ check }) => check(watchedMovies));
+const getUserRank = (watchedMovies) => userRanks.find(({check}) => check(watchedMovies));
 
 const createUserRankTemplate = (watchedMoviesCount) => {
-  const { userRank } = getUserRank(watchedMoviesCount);
+  const {userRank} = getUserRank(watchedMoviesCount);
 
   return `<section class="header__profile profile">
     <p class="profile__rating">${userRank}</p>
@@ -30,25 +31,14 @@ const createUserRankTemplate = (watchedMoviesCount) => {
   </section>`;
 };
 
-export default class UserRank {
+
+export default class UserRank extends AbstractComponent {
   constructor(watchedMoviesCount) {
+    super();
     this._watchedMoviesCount = watchedMoviesCount;
-    this._element = null;
   }
 
   getTemplate() {
     return createUserRankTemplate(this._watchedMoviesCount);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
