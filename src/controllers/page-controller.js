@@ -1,10 +1,10 @@
-import FilmsListTopRatedComponent from './../components/film-list-top-rated';
-import FilmsListTopCommentedComponent from './../components/films-list-top-commented';
-import FilmListContainerComponent from './../components/film-list-container';
-import ShowMoreButtonComponent from './../components/show-more-button';
-import FilmCardComponent from './../components/film-card';
-import FilmDetailsComponent from './../components/film-details';
-import { RenderPosition, render, remove } from './../utils/render';
+import FilmsListTopRatedComponent from '../components/films-list-top-rated';
+import FilmsListTopCommentedComponent from '../components/films-list-top-commented';
+import FilmListContainerComponent from '../components/film-list-container';
+import ShowMoreButtonComponent from '../components/show-more-button';
+import FilmCardComponent from '../components/film-card';
+import FilmPopupComponent from '../components/film-details';
+import { RenderPosition, render, remove } from '../utils/render';
 
 
 const SHOWING_FILM_CARD_COUNT_ON_START = 5;
@@ -14,30 +14,30 @@ const SHOWING_FILM_CARD_COUNT_BY_EXTRA = 2;
 
 const renderFilms = (cardContainer, popupContainer, film) => {
     const FilmCard = new FilmCardComponent(film);
-    const FilmDetails = new FilmDetailsComponent(film);
+    const FilmPopup = new FilmPopupComponent(film);
 
     const onEscKeyDown = (evt) => {
-        const escKeyCode = evt.key === 27;
+        const escKeyCode = evt.key === 27 || `Esc`;
 
         if (escKeyCode) {
-            closeFilmDetails(evt);
+            closeFilmPopup(evt);
         }
     };
 
-    const openFilmDetails = (evt) => {
+    const openFilmPopup = (evt) => {
         evt.preventDefault();
-        render(popupContainer, FilmDetails, RenderPosition.BEFOREEND);
+        render(popupContainer, FilmPopup, RenderPosition.BEFOREEND);
         document.addEventListener(`keydown`, onEscKeyDown);
     };
 
-    const closeFilmDetails = (evt) => {
+    const closeFilmPopup = (evt) => {
         evt.preventDefault();
-        remove(FilmDetails);
+        remove(FilmPopup);
         document.removeEventListener(`keydown`, onEscKeyDown);
     };
 
-    FilmCard.filmCardClickHandler(openFilmDetails);
-    FilmDetails.closePopupButtonClickHandler(closeFilmDetails);
+    FilmCard.filmCardClickHandler(openFilmPopup);
+    FilmPopup.closePopupButtonClickHandler(closeFilmPopup);
 
     render(cardContainer, FilmCard, RenderPosition.BEFOREEND);
 };
