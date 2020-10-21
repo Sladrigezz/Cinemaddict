@@ -1,4 +1,4 @@
-import { formatDuration, getFileName } from './../utils';
+import { formatDuration, getFileName } from '../utils/common';
 import AbstractComponent from './abstract-component';
 
 const createFilmPopupTemplate = (film) => {

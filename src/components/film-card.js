@@ -1,5 +1,5 @@
 import AbstractComponent from './abstract-component';
-import { formatDuration, getFileName } from './../utils';
+import { formatDuration, getFileName } from '../utils/common';
 
 const setControlClass = (control) => control ? `film-card__controls-item--active` : ``;
 

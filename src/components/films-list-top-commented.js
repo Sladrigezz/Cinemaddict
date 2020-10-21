@@ -8,7 +8,7 @@ const createFilmsTopCommentedTemplate = () =>
   </section>`;
 
 
-export default class FilmsListMostCommented extends AbstractComponent {
+export default class FilmsListTopCommented extends AbstractComponent {
   getTemplate() {
     return createFilmsTopCommentedTemplate();
   }

@@ -4,7 +4,7 @@ import {
   getRandomIntInclusive,
   getRandomArrayItem,
   getRandomBooleanValue,
-} from './../utils';
+} from '../utils/common';
 
 
 const generateDescription = () => {
@@ -32,7 +32,7 @@ const generateFilmCard = () => ({
   genre: getRandomArrayItem(genres),
   duration: getRandomIntInclusive(10, 180),
   description: generateDescription(),
-  commentsCount: getRandomIntInclusive(0, 5),
+  commentsCount: getRandomIntInclusive(0, 30),
   isInWatchlist: getRandomBooleanValue(),
   isWatched: getRandomBooleanValue(),
   isFavorite: getRandomBooleanValue(),
