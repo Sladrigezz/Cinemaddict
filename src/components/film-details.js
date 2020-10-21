@@ -1,7 +1,7 @@
 import { formatDuration, getFileName } from './../utils';
 import AbstractComponent from './abstract-component';
 
-const createFilmDetailsTemplate = (film) => {
+const createFilmPopupTemplate = (film) => {
   const {
     title,
     rate,
@@ -168,14 +168,14 @@ const createFilmDetailsTemplate = (film) => {
   </section>`;
 };
 
-export default class FilmDetails extends AbstractComponent {
+export default class FilmPopup extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film);
+    return createFilmPopupTemplate(this._film);
   }
 
   closePopupButtonClickHandler(handler) {
