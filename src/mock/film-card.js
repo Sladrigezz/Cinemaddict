@@ -1,10 +1,5 @@
-import { text, filmTitles, genres } from './../const';
-import {
-  getRandomArbitrary,
-  getRandomIntInclusive,
-  getRandomArrayItem,
-  getRandomBooleanValue,
-} from '../utils/common';
+import { text, filmTitles, genres, users, emotions } from './../const';
+import { getRandomArbitrary, getRandomIntInclusive, getRandomArrayItem, getRandomBooleanValue } from '../utils/common';
 
 
 const generateDescription = () => {
@@ -24,20 +19,62 @@ const generateDescription = () => {
   return result.join(` `);
 };
 
+const generateGenres = (genres) => genres.filter(getRandomBooleanValue).slice(0, getRandomIntInclusive(1, 3));
 
-const generateFilmCard = () => ({
-  title: getRandomArrayItem(filmTitles),
-  rate: +getRandomArbitrary(0, 10).toFixed(1),
-  year: getRandomIntInclusive(1920, 1950),
-  genre: getRandomArrayItem(genres),
-  duration: getRandomIntInclusive(10, 180),
-  description: generateDescription(),
-  commentsCount: getRandomIntInclusive(0, 30),
-  isInWatchlist: getRandomBooleanValue(),
-  isWatched: getRandomBooleanValue(),
-  isFavorite: getRandomBooleanValue(),
-});
+const getRandomRating = () => +getRandomArbitrary(1, 9).toFixed(1);
 
+const getRandomDate = () => {
+  const targetDate = new Date();
+  const diffYear = getRandomIntInclusive(0, 100);
+  targetDate.setFullYear(targetDate.getFullYear() - diffYear);
+
+  return targetDate;
+};
+
+const getRandomCommentDate = () => {
+  const currentDate = Date.now();
+  const threeDaysInMs = 1000 * 60 * 60 * 24 * 3;
+  const diffDate = getRandomIntInclusive(0, threeDaysInMs);
+  return new Date(currentDate - diffDate);
+};
+
+const generateComment = () => {
+  return {
+    text: generateDescription(),
+    emotions: getRandomArrayItem(emotions),
+    author: getRandomArrayItem(users),
+    date: getRandomCommentDate(),
+  };
+};
+
+const generateComments = () => {
+  const commentCount = getRandomIntInclusive(0, 5);
+  const result = [];
+
+  for (let i = 0; i < commentCount; i++) {
+    result.push(generateComment());
+  }
+
+  return result;
+};
+
+
+const generateFilmCard = () => {
+  const rate = getRandomRating();
+
+  return {
+    title: getRandomArrayItem(filmTitles),
+    rate,
+    releaseDate: getRandomDate(),
+    genres: [...new Set(generateGenres(genres))],
+    duration: getRandomIntInclusive(10, 180),
+    description: generateDescription(),
+    isInWatchlist: getRandomBooleanValue(),
+    isWatched: getRandomBooleanValue(),
+    isFavorite: getRandomBooleanValue(),
+    comments: generateComments(),
+  };
+};
 
 const generateFilmCards = (count) => {
   const result = [];

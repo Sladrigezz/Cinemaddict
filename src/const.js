@@ -30,4 +30,25 @@ const genres = [
     `Western`,
 ];
 
-export { text, filmTitles, genres };
+const emotions = [
+    `angry`,
+    `puke`,
+    `sleeping`,
+    `smile`,
+    `trophy`,
+];
+
+const users = [
+    `Mike`,
+    `Pasha`,
+    `Amiran`,
+    `Marcus`,
+    `Prince`,
+    `Masha`,
+    `Denchik`,
+    `Anna`,
+    `John`,
+    `Max`,
+];
+
+export { text, filmTitles, genres, users, emotions };

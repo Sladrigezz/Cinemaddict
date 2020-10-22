@@ -1,16 +1,17 @@
 import AbstractComponent from './abstract-component';
-import { formatDuration, getFileName } from '../utils/common';
+import { formatDuration, formatYear, getFileName } from '../utils/common';
 
-const setControlClass = (control) => control ? `film-card__controls-item--active` : ``;
-
+const createButtonMarkup = (name, isActive) =>
+  `<button class="film-card__controls-item button film-card__controls-item--${name}
+    ${isActive ? `film-card__controls-item--active` : ``} ">${name}</button>`;
 
 const createFilmCardTemplate = (film) => {
   const {
     title,
     rate,
-    year,
+    releaseDate,
     duration,
-    genre,
+    genres,
     description,
     commentsCount,
     isInWatchlist,
@@ -18,6 +19,9 @@ const createFilmCardTemplate = (film) => {
     isFavorite,
   } = film;
 
+  const watchlistButton = createButtonMarkup(`add-to-watchlist`, isInWatchlist);
+  const watchedButton = createButtonMarkup(`mark-as-watched`, isWatched);
+  const favoriteButton = createButtonMarkup(`favorite`, isFavorite);
   const formattedDuration = formatDuration(duration);
   const fileName = getFileName(title);
 
@@ -25,23 +29,17 @@ const createFilmCardTemplate = (film) => {
     <h3 class="film-card__title">${title}</h3>
     <p class="film-card__rating">${rate}</p>
     <p class="film-card__info">
-      <span class="film-card__year">${year}</span>
+      <span class="film-card__year">${formatYear(releaseDate)}</span>
       <span class="film-card__duration">${formattedDuration}</span>
-      <span class="film-card__genre">${genre}</span>
+      <span class="film-card__genre">${genres}</span>
     </p>
     <img src="./images/posters/${fileName}.jpg" alt="" class="film-card__poster">
     <p class="film-card__description">${description}</p>
     <a class="film-card__comments">${commentsCount} comments</a>
     <form class="film-card__controls">
-      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${setControlClass(isInWatchlist)}">
-        Add to watchlist
-      </button>
-      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched  ${setControlClass(isWatched)}">
-        Mark as watched
-      </button>
-      <button class="film-card__controls-item button film-card__controls-item--favorite  ${setControlClass(isFavorite)}">
-        Mark as favorite
-      </button>
+      ${watchlistButton}
+      ${watchedButton}
+      ${favoriteButton}
     </form>
   </article>`;
 };
@@ -58,6 +56,21 @@ export default class FilmCard extends AbstractComponent {
 
   filmCardClickHandler(handler) {
     this.getElement().querySelector(`.film-card__poster`)
+      .addEventListener(`click`, handler);
+  }
+
+  watchlistButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
+      .addEventListener(`click`, handler);
+  }
+
+  watchedButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
+      .addEventListener(`click`, handler);
+  }
+
+  favoriteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
       .addEventListener(`click`, handler);
   }
 }

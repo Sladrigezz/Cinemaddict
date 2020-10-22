@@ -14,6 +14,6 @@ export default class FilmsListTopCommented extends AbstractComponent {
   }
 
   getFilmsByCommentCount(films) {
-    return films.slice().sort((a, b) => b.commentsCount - a.commentsCount);
+    return films.slice().sort((a, b) => b.comments - a.comments);
   }
 }
