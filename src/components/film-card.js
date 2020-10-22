@@ -1,4 +1,4 @@
-import AbstractSmartComponent from './abstract-smart-component';
+import AbstractComponent from './abstract-smart-component';
 import { formatDuration, formatYear, getFileName } from '../utils/common';
 
 const createButtonMarkup = (name, isActive) =>
@@ -44,7 +44,7 @@ const createFilmCardTemplate = (film) => {
   </article>`;
 };
 
-export default class FilmCard extends AbstractSmartComponent {
+export default class FilmCard extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;

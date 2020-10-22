@@ -85,11 +85,8 @@ const createFilmPopupTemplate = (film) => {
                 <td class="film-details__cell">USA</td>
               </tr>
               <tr class="film-details__row">
-                <td class="film-details__term">Genres</td>
-                <td class="film-details__cell">
-                  <span class="film-details__genre">${genres}</span>
-                  </span>
-                </td>
+                <td class="film-details__term">${genres}</td>
+                <td class="film-details__cell">${genres}</td>
               </tr>
             </table>
             <p class="film-details__film-description">${description}</p>
