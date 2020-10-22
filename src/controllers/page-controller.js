@@ -17,9 +17,9 @@ const renderFilm = (cardContainer, popupContainer, film) => {
     const FilmPopup = new FilmPopupComponent(film);
 
     const onEscKeyDown = (evt) => {
-        const escKey = evt.key === `Escape` || evt.key === `Esc`;
+        const escKeyCode = evt.keyCode === 27 || evt.key === `Esc`;
 
-        if (escKey) {
+        if (escKeyCode) {
             closeFilmPopup(evt);
         }
     };
@@ -116,16 +116,16 @@ export default class PageController {
 
 
 
-                render(filmsElement, this._filmsListTopRatedComponent, RenderPosition.BEFOREEND);
-                const topRatedContainerElements = filmsElement.querySelector(`.films-list--extra:nth-child(2) .films-list__container`);
-                renderFilms(topRatedContainerElements, filmsElement, sortedFilmsByRating.slice(0, SHOWING_FILM_CARD_COUNT_BY_EXTRA));
+            render(filmsElement, this._filmsListTopRatedComponent, RenderPosition.BEFOREEND);
+            const topRatedContainerElements = filmsElement.querySelector(`.films-list--extra:nth-child(2) .films-list__container`);
+            renderFilms(topRatedContainerElements, filmsElement, sortedFilmsByRating.slice(0, SHOWING_FILM_CARD_COUNT_BY_EXTRA));
 
 
 
 
-                render(filmsElement, this._filmsListTopCommentedComponent, RenderPosition.BEFOREEND);
-                const mostCommentedContainerElements = filmsElement.querySelector(`.films-list--extra:last-child .films-list__container`);
-                renderFilms(mostCommentedContainerElements, filmsElement, sortedFilmsByComments.slice(0, SHOWING_FILM_CARD_COUNT_BY_EXTRA));
+            render(filmsElement, this._filmsListTopCommentedComponent, RenderPosition.BEFOREEND);
+            const mostCommentedContainerElements = filmsElement.querySelector(`.films-list--extra:last-child .films-list__container`);
+            renderFilms(mostCommentedContainerElements, filmsElement, sortedFilmsByComments.slice(0, SHOWING_FILM_CARD_COUNT_BY_EXTRA));
 
         }
     }
