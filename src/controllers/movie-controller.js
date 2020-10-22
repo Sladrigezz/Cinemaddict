@@ -29,7 +29,7 @@ export default class MovieController {
         const oldMoviePopupComponent = this._moviePopupComponent;
 
         this._movieCardComponent = new FilmCardComponent(movie);
-        this._moviePopupComponent = new FilmDetailsComponent(movie);
+        this._moviePopupComponent = new FilmPopupComponent(movie);
 
         const openMoviePopup = (evt) => {
             evt.preventDefault();
