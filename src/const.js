@@ -35,7 +35,6 @@ const emotions = [
     `puke`,
     `sleeping`,
     `smile`,
-    `trophy`,
 ];
 
 const users = [

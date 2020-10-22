@@ -20,7 +20,20 @@ const createCommentsListMarkup = (comments) => comments
   })
   .join(`\n`);
 
-const createFilmPopupTemplate = (film) => {
+const createControlItemMarkup = (name, labelText, isActive) => {
+  return `<input
+      type="checkbox"
+      class="film-details__control-input visually-hidden"
+      id="${name}"
+      name="${name}"
+      ${isActive ? `checked` : ``}>
+    <label
+      for="${name}"
+      class="film-details__control-label film-details__control-label--${name}"
+    >${labelText}</label>`;
+};
+
+const createFilmPopupTemplate = (film, isChecked) => {
   const {
     title,
     rate,
@@ -30,6 +43,12 @@ const createFilmPopupTemplate = (film) => {
     description,
     comments,
   } = film;
+
+  const {
+    isInWatchlist,
+    isWatched,
+    isFavorite,
+  } = isChecked;
 
   const formattedDuration = formatDuration(duration);
   const fileName = getFileName(title);
@@ -102,7 +121,7 @@ const createFilmPopupTemplate = (film) => {
         <section class="film-details__comments-wrap">
           <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
           <ul class="film-details__comments-list">
-          ${createCommentsListMarkup}
+          ${createCommentsListMarkup(comments)}
           </ul>
           <div class="film-details__new-comment">
             <div for="add-emoji" class="film-details__add-emoji-label"></div>

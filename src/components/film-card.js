@@ -5,6 +5,17 @@ const createButtonMarkup = (name, isActive) =>
   `<button class="film-card__controls-item button film-card__controls-item--${name}
     ${isActive ? `film-card__controls-item--active` : ``} ">${name}</button>`;
 
+const createCommentsTitleText = (comments) => {
+  switch (comments.length) {
+    case 0:
+      return `no comments`;
+    case 1:
+      return `1 comment`;
+    default:
+      return `${comments.length} comments`;
+  }
+};
+
 const createFilmCardTemplate = (film) => {
   const {
     title,
@@ -13,7 +24,7 @@ const createFilmCardTemplate = (film) => {
     duration,
     genres,
     description,
-    commentsCount,
+    comments,
     isInWatchlist,
     isWatched,
     isFavorite,
@@ -35,7 +46,7 @@ const createFilmCardTemplate = (film) => {
     </p>
     <img src="./images/posters/${fileName}.jpg" alt="" class="film-card__poster">
     <p class="film-card__description">${description}</p>
-    <a class="film-card__comments">${commentsCount} comments</a>
+    <a class="film-card__comments">${createCommentsTitleText(comments)}</a>
     <form class="film-card__controls">
       ${watchlistButton}
       ${watchedButton}

@@ -35,11 +35,11 @@ export default class PageController {
         this._onSortTypeChange = this._onSortTypeChange.bind(this);
         this._onDataChange = this._onDataChange.bind(this);
         this._onViewChange = this._onViewChange.bind(this);
-        // this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+        this._sortComponent.sortTypeChangeHandler(this._onSortTypeChange);
     }
 
     render(films) {
-        this.films = films
+        this._films = films
 
         if (films.length) {
             const filmsElement = this._filmsComponent.getElement();
