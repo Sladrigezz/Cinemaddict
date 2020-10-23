@@ -3,5 +3,5 @@
 Install npm-packages:
 npm i
 
-Run dev-server
+Run dev-server:
 npm start
