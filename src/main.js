@@ -3,53 +3,63 @@ import FilterController from './controllers/filter';
 import SortComponent from './components/sort-list';
 import FilmsComponent from './components/films';
 import FilmsListComponent from './components/films-list';
-import FilmListTitleComponent from './components/film-list-title';
-import StatsComponent from './components/stats';
 import MoviesModel from './models/movies';
 import PageController from './controllers/page-controller';
-import {generateFilms} from './mock/film-card';
-import {RenderPosition, render} from './utils/render';
-import {statsPeriods} from './const';
+import { RenderPosition, render } from './utils/render';
+import { statsPeriods } from './const';
+import FilmListTitleController from './controllers/film-list-title';
+import StatsController from './controllers/stats';
+import API from './api';
 
+const AUTHORIZATION = `Basic mJ7UKvlNLEru54N`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
-const FILM_COUNT = 15;
-
-const films = generateFilms(FILM_COUNT);
+const api = new API(END_POINT, AUTHORIZATION);
 const moviesModel = new MoviesModel();
-moviesModel.setMovies(films);
-
 
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics p`);
 
-footerStatisticsElement.textContent = `${films.length} movies inside`;
-
 const filmsComponent = new FilmsComponent();
 const sortComponent = new SortComponent();
-const statsComponent = new StatsComponent(moviesModel, statsPeriods.ALL_TIME);
 
 const userRankController = new UserRankController(headerElement, moviesModel);
-const pageController = new PageController(filmsComponent, sortComponent, moviesModel);
-const filterController = new FilterController(mainElement, moviesModel, pageController, sortComponent, statsComponent);
-
+const pageController = new PageController(filmsComponent, sortComponent, moviesModel, api);
+const statsController = new StatsController(mainElement, moviesModel, statsPeriods.ALL_TIME);
+const filterController = new FilterController(mainElement, moviesModel, pageController, sortComponent, statsController);
 
 userRankController.render();
 filterController.render();
+statsController.render();
+statsController.hide();
 
-render(mainElement, statsComponent, RenderPosition.BEFOREEND);
 render(mainElement, sortComponent, RenderPosition.BEFOREEND);
 render(mainElement, filmsComponent, RenderPosition.BEFOREEND);
 
 const filmsElement = mainElement.querySelector(`.films`);
-
 render(filmsElement, new FilmsListComponent(), RenderPosition.BEFOREEND);
 
 const filmsListElement = filmsElement.querySelector(`.films-list`);
+const filmListTitleController = new FilmListTitleController(filmsListElement, moviesModel);
+filmListTitleController.render();
 
-render(filmsListElement, new FilmListTitleComponent(films), RenderPosition.BEFOREEND);
+api.getMovies()
+    .then((movies) => {
 
-statsComponent.hide();
-pageController.render();
-pageController.renderTopRatedList();
-pageController.renderMostCommentedList();
+        const commentsPromises = movies.map((movie) => {
+            return api.getComments(movie.id).then((comments) => {
+                movie.comments = comments;
+            });
+        });
+
+        Promise.all(commentsPromises).then(() => {
+            moviesModel.setMovies(movies);
+
+            pageController.render();
+            pageController.renderTopRatedList();
+            pageController.renderMostCommentedList();
+
+            footerStatisticsElement.textContent = `${movies.length} movies inside`;
+        });
+    });

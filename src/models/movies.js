@@ -26,6 +26,7 @@ export default class Movies {
 
   setMovies(movies) {
     this._movies = Array.from(movies);
+    this._callHandlers(this._dataChangeHandlers);
   }
 
   setFilter(filterType) {
@@ -56,8 +57,7 @@ export default class Movies {
   }
 
   hasRatings() {
-    return this._movies.some(({rating}) => !!rating);
-  }
+    return this._movies.some((movie) => !!movie.filmInfo.totalRating);  }
 
   hasComments() {
     return this._movies.some(({comments}) => !!comments.length);

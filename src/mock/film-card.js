@@ -1,10 +1,5 @@
 import { text, Emotions, Users, Genres, FilmTitles } from '../const';
-import {
-  getRandomArbitrary,
-  getRandomIntInclusive,
-  getRandomArrayItem,
-  getRandomBooleanValue,
-} from '../utils/common';
+import { getRandomArbitrary, getRandomIntInclusive, getRandomArrayItem, getRandomBooleanValue, getFileName, } from '../utils/common';
 
 const threeDaysInMs = 1000 * 60 * 60 * 24 * 3;
 const hundredYears = 100;
@@ -23,9 +18,18 @@ const getRandomReleaseDate = () => {
   const diffYear = getRandomIntInclusive(0, hundredYears);
   targetDate.setFullYear(targetDate.getFullYear() - diffYear);
 
-  return targetDate;
+  return targetDate.getTime();
 };
 
+const Countries = [
+  `United States`,
+  `Japan`,
+  `South Korea`,
+  `France`,
+  `Germany`,
+  `Russia`,
+  `Australia`,
+];
 
 const generateDescription = () => {
   const sentences = text
@@ -44,72 +48,93 @@ const generateDescription = () => {
   return result.join(` `);
 };
 
-const generateGenres = (genres) => genres
+const generateItems = (arr) => arr
   .filter(getRandomBooleanValue)
   .slice(0, getRandomIntInclusive(1, 3));
 
 const generateComment = () => {
   return {
-    id: String(new Date() + Math.random()),
-    text: generateDescription(),
-    emotion: getRandomArrayItem(Emotions),
+
     author: getRandomArrayItem(Users),
     date: getRandomDate(threeDaysInMs),
+    text: generateDescription(),
+    emotion: getRandomArrayItem(Emotions),
   };
 };
 
-const generateComments = () => {
-  const commentsAmount = getRandomIntInclusive(0, 5);
-  const result = [];
+const gererateAllComments = () => {
+  const commentsAmount = 100;
+  const allComments = [];
 
   for (let i = 0; i < commentsAmount; i++) {
-    result.push(generateComment());
+    const comment = generateComment();
+    comment.id = i;
+    allComments.push(comment);
   }
 
-  return result;
+  return allComments;
 };
 
-const generateRating = (userRating) => {
-  if (getRandomBooleanValue()) {
-    return getRandomRating();
-  }
+const allComments = gererateAllComments();
+const reservedComments = [];
 
-  return userRating || null;
-};
-
+const generateCommentsForFilm = (amount) => {
+  const comments = [];
+  for (let i = 0; i < amount; i++) {
+    const commentId = getRandomArrayItem(allComments).id;
+    if (!reservedComments.includes(commentId)) {
+      comments.push(commentId);
+      reservedComments.push(commentId);
+    }
+    return comments;
+  };
+}
 
 const generateFilm = () => {
+  const title = getRandomArrayItem(FilmTitles);
   const isWatched = getRandomBooleanValue();
   const userRating = getRandomBooleanValue() ? getRandomIntInclusive(1, 9) : null;
-  const rating = generateRating(userRating);
-
+  const totalRating = getRandomBooleanValue() ? getRandomRating() : null;
+  const commentsAmount = getRandomIntInclusive(1, 10);
+  const comments = generateCommentsForFilm(commentsAmount);
 
   return {
-    id: String(new Date() + Math.random()),
-    title: getRandomArrayItem(FilmTitles),
-    rating,
+    filmInfo: {
+      title,
+      alternativeTitle: `alternative title`,
+      totalRating,
+      poster: `./images/posters/${getFileName(title)}.jpg`,
+      ageRating: getRandomIntInclusive(0, 21),
+      director: getRandomArrayItem(Users),
+      writers: [...new Set(generateItems(Users))],
+      actors: [...new Set(generateItems(Users))],
+      releaseDate: getRandomReleaseDate(),
+      releaseCountry: getRandomArrayItem(Countries),
+      duration: getRandomIntInclusive(10, 180),
+      genres: [...new Set(generateItems(Genres))],
+      description: generateDescription(),
+    },
     userRating: isWatched ? userRating : null,
-    releaseDate: getRandomReleaseDate(),
-    genres: [...new Set(generateGenres(Genres))],
-    duration: getRandomIntInclusive(10, 180),
-    description: generateDescription(),
+
     isInWatchlist: getRandomBooleanValue(),
     isWatched,
     watchingDate: isWatched ? getRandomDate(yearInMs) : null,
     isFavorite: getRandomBooleanValue(),
-    comments: generateComments(),
+    comments,
   };
 };
 
 
 const generateFilms = (count) => {
-  const result = [];
+  const films = [];
 
   for (let i = 0; i < count; i++) {
-    result.push(generateFilm());
+    const film = generateFilm();
+    film.id = i;
+    films.push(film);
   }
 
-  return result;
+  return film;
 };
 
-export { generateFilm, generateFilms };
+export { generateFilm, generateFilms, allComments };
