@@ -1,5 +1,30 @@
-import { text, filmTitles, genres, users, emotions } from './../const';
-import { getRandomArbitrary, getRandomIntInclusive, getRandomArrayItem, getRandomBooleanValue } from '../utils/common';
+import { text, Emotions, Users, Genres, FilmTitles } from '../const';
+import {
+  getRandomArbitrary,
+  getRandomIntInclusive,
+  getRandomArrayItem,
+  getRandomBooleanValue,
+} from '../utils/common';
+
+const threeDaysInMs = 1000 * 60 * 60 * 24 * 3;
+const hundredYears = 100;
+const yearInMs = 1000 * 60 * 60 * 24 * 365;
+
+const getRandomRating = () => +getRandomArbitrary(1, 9).toFixed(1);
+
+const getRandomDate = (period) => {
+  const currentDate = Date.now();
+  const diffDate = getRandomIntInclusive(0, period);
+  return new Date(currentDate - diffDate);
+};
+
+const getRandomReleaseDate = () => {
+  const targetDate = new Date();
+  const diffYear = getRandomIntInclusive(0, hundredYears);
+  targetDate.setFullYear(targetDate.getFullYear() - diffYear);
+
+  return targetDate;
+};
 
 
 const generateDescription = () => {
@@ -19,40 +44,25 @@ const generateDescription = () => {
   return result.join(` `);
 };
 
-const generateGenres = (genres) => genres.filter(getRandomBooleanValue).slice(0, getRandomIntInclusive(1, 3));
-
-const getRandomRating = () => +getRandomArbitrary(1, 9).toFixed(1);
-
-const getRandomDate = () => {
-  const targetDate = new Date();
-  const diffYear = getRandomIntInclusive(0, 100);
-  targetDate.setFullYear(targetDate.getFullYear() - diffYear);
-
-  return targetDate;
-};
-
-const getRandomCommentDate = () => {
-  const currentDate = Date.now();
-  const threeDaysInMs = 1000 * 60 * 60 * 24 * 3;
-  const diffDate = getRandomIntInclusive(0, threeDaysInMs);
-  return new Date(currentDate - diffDate);
-};
+const generateGenres = (genres) => genres
+  .filter(getRandomBooleanValue)
+  .slice(0, getRandomIntInclusive(1, 3));
 
 const generateComment = () => {
   return {
-    text: generateDescription(),
-    emotion: getRandomArrayItem(emotions),
-    author: getRandomArrayItem(users),
-    date: getRandomCommentDate(),
     id: String(new Date() + Math.random()),
+    text: generateDescription(),
+    emotion: getRandomArrayItem(Emotions),
+    author: getRandomArrayItem(Users),
+    date: getRandomDate(threeDaysInMs),
   };
 };
 
 const generateComments = () => {
-  const commentCount = getRandomIntInclusive(0, 5);
+  const commentsAmount = getRandomIntInclusive(0, 5);
   const result = [];
 
-  for (let i = 0; i < commentCount; i++) {
+  for (let i = 0; i < commentsAmount; i++) {
     result.push(generateComment());
   }
 
@@ -67,34 +77,39 @@ const generateRating = (userRating) => {
   return userRating || null;
 };
 
-const generateFilmCard = () => {
+
+const generateFilm = () => {
+  const isWatched = getRandomBooleanValue();
   const userRating = getRandomBooleanValue() ? getRandomIntInclusive(1, 9) : null;
-  const rate = generateRating(userRating);
+  const rating = generateRating(userRating);
+
 
   return {
-    title: getRandomArrayItem(filmTitles),
-    rate,
-    releaseDate: getRandomDate(),
-    genres: [...new Set(generateGenres(genres))],
+    id: String(new Date() + Math.random()),
+    title: getRandomArrayItem(FilmTitles),
+    rating,
+    userRating: isWatched ? userRating : null,
+    releaseDate: getRandomReleaseDate(),
+    genres: [...new Set(generateGenres(Genres))],
     duration: getRandomIntInclusive(10, 180),
     description: generateDescription(),
     isInWatchlist: getRandomBooleanValue(),
-    isWatched: getRandomBooleanValue(),
+    isWatched,
+    watchingDate: isWatched ? getRandomDate(yearInMs) : null,
     isFavorite: getRandomBooleanValue(),
     comments: generateComments(),
-    userRating: isWatched ? userRating : null,
-    id: String(new Date() + Math.random()),
   };
 };
 
-const generateFilmCards = (count) => {
+
+const generateFilms = (count) => {
   const result = [];
 
   for (let i = 0; i < count; i++) {
-    result.push(generateFilmCard());
+    result.push(generateFilm());
   }
 
   return result;
 };
 
-export { generateFilmCard, generateFilmCards };
+export { generateFilm, generateFilms };

@@ -1,52 +1,68 @@
-import FilterComponent from '../components/filter';
-import { FilterType } from '../const';
-import { render, replace, RenderPosition } from '../utils/render';
-import { getFilmsByFilter } from '../utils/filter';
+import FilterComponent from '../components/filters';
+import {FilterType} from '../const';
+import {render, replace, RenderPosition} from '../utils/render';
+import {getFilmsByFilter} from '../utils/filter';
 
 
 export default class FilterController {
-    constructor(container, moviesModel) {
-        this._container = container;
-        this._moviesModel = moviesModel;
+  constructor(container, moviesModel, pageController, sortComponent, statsComponent) {
+    this._container = container;
+    this._moviesModel = moviesModel;
+    this._pageController = pageController;
+    this._sortComponent = sortComponent;
+    this._statsComponent = statsComponent;
 
-        this._activeFilterType = FilterType.ALL;
-        this._filterComponent = null;
+    this._activeFilterType = FilterType.ALL;
+    this._filterComponent = null;
 
-        this._onDataChange = this._onDataChange.bind(this);
-        this._onFilterChange = this._onFilterChange.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
-        this._moviesModel.setDataChangeHandler(this._onDataChange);
+    this._moviesModel.setDataChangeHandler(this._onDataChange);
+  }
+
+  render() {
+    const container = this._container;
+    const allFilms = this._moviesModel.getMoviesAll();
+    const filters = Object.values(FilterType).map((filterType) => {
+      return {
+        name: filterType,
+        count: getFilmsByFilter(allFilms, filterType).length,
+        active: filterType === this._activeFilterType,
+      };
+    });
+    const oldComponent = this._filterComponent;
+
+    this._filterComponent = new FilterComponent(filters);
+    this._filterComponent.setFilterChangeHandler(this._onFilterChange);
+
+    if (oldComponent) {
+      replace(this._filterComponent, oldComponent);
+    } else {
+      render(container, this._filterComponent, RenderPosition.BEFOREEND);
     }
+  }
 
-    render() {
-        const container = this._container;
-        const allFilms = this._moviesModel.getMoviesAll();
-        const filters = Object.values(FilterType).map((filterType) => {
-            return {
-                name: filterType,
-                count: getFilmsByFilter(allFilms, filterType).length,
-                active: filterType === this._activeFilterType,
-            };
-        });
-        const oldComponent = this._filterComponent;
+  _onFilterChange(filterType) {
+    this._moviesModel.setFilter(filterType);
+    this._activeFilterType = filterType;
+    this._sortComponent.setSortTypeDefault();
+    this.render();
 
-        this._filterComponent = new FilterComponent(filters);
-        this._filterComponent.setFilterChangeHandler(this._onFilterChange);
-
-        if (oldComponent) {
-            replace(this._filterComponent, oldComponent);
-        } else {
-            render(container, this._filterComponent, RenderPosition.BEFOREEND);
-        }
+    switch (filterType) {
+      case FilterType.STATS:
+        this._pageController.hide();
+        this._sortComponent.hide();
+        this._statsComponent.show();
+        break;
+      default:
+        this._pageController.show();
+        this._sortComponent.show();
+        this._statsComponent.hide();
     }
+  }
 
-    _onFilterChange(filterType) {
-        this._moviesModel.setFilter(filterType);
-        this._activeFilterType = filterType;
-        this.render();
-    }
-
-    _onDataChange() {
-        this.render();
-    }
+  _onDataChange() {
+    this.render();
+  }
 }
