@@ -1,18 +1,18 @@
 import UserRankController from './controllers/user-rank';
 import FilterController from './controllers/filter';
-import SortComponent from './components/sort';
+import SortComponent from './components/sort-list';
 import FilmsComponent from './components/films';
 import FilmsListComponent from './components/films-list';
 import FilmListTitleComponent from './components/film-list-title';
 import StatsComponent from './components/stats';
 import MoviesModel from './models/movies';
-import PageController from './controllers/page';
-import {generateFilms} from './mock/film';
+import PageController from './controllers/page-controller';
+import {generateFilms} from './mock/film-card';
 import {RenderPosition, render} from './utils/render';
 import {statsPeriods} from './const';
 
 
-const FILM_COUNT = 20;
+const FILM_COUNT = 15;
 
 const films = generateFilms(FILM_COUNT);
 const moviesModel = new MoviesModel();

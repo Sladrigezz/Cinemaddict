@@ -1,99 +1,122 @@
-import FilmCardComponent from './../components/film-card';
-import FilmPopupComponent from './../components/film-details';
-import { RenderPosition, render, replace, remove } from './../utils/render';
+import FilmCardComponent from '../components/film-card';
+import FilmDetailsComponent from '../components/film-details';
+import {RenderPosition, render, replace, remove} from '../utils/render';
 
 
 export const Mode = {
-    DEFAULT: `default`,
-    POPUP: `popup`,
+  DEFAULT: `default`,
+  DETAILS: `details`,
 };
 
 
 export default class MovieController {
-    constructor(cardContainer, popupContainer, onDataChange, onViewChange) {
-        this._cardContainer = cardContainer;
-        this._popupContainer = popupContainer;
-        this._onDataChange = onDataChange;
-        this._onViewChange = onViewChange;
+  constructor(cardContainer, detailsContainer, onDataChange, onViewChange) {
+    this._cardContainer = cardContainer;
+    this._detailsContainer = detailsContainer;
+    this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
 
-        this._mode = Mode.DEFAULT;
+    this._mode = Mode.DEFAULT;
 
-        this._movieCardComponent = null;
-        this._moviePopupComponent = null;
+    this._movieCardComponent = null;
+    this._movieDetailsComponent = null;
+  }
+
+  render(movie) {
+    const oldMovieCardComponent = this._movieCardComponent;
+    const oldMovieDetailsComponent = this._movieDetailsComponent;
+
+    this._movieCardComponent = new FilmCardComponent(movie);
+    this._movieDetailsComponent = new FilmDetailsComponent(movie);
+
+    const onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+      if (isEscKey) {
+        closeMovieDetails(evt);
+      }
+    };
+
+    const openMovieDetails = (evt) => {
+      evt.preventDefault();
+      this._onViewChange();
+
+      render(this._detailsContainer, this._movieDetailsComponent, RenderPosition.BEFOREEND);
+
+      this._mode = Mode.DETAILS;
+
+      document.addEventListener(`keydown`, onEscKeyDown);
+    };
+
+    const closeMovieDetails = (evt) => {
+      evt.preventDefault();
+
+      const data = this._movieDetailsComponent.getData();
+      this._onDataChange(this, movie, Object.assign({}, movie, data));
+
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    };
+
+    this._movieCardComponent.setFilmPosterClickHandler(openMovieDetails);
+    this._movieCardComponent.setFilmTitleClickHandler(openMovieDetails);
+    this._movieCardComponent.setFilmCommentsClickHandler(openMovieDetails);
+
+    this._movieCardComponent.setWatchlistButtonClickHandler((evt) => {
+      evt.preventDefault();
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isInWatchlist: !movie.isInWatchlist,
+      }));
+    });
+
+    this._movieCardComponent.setWatchedButtonClickHandler((evt) => {
+      evt.preventDefault();
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        watchingDate: movie.isWatched ? null : new Date(),
+        isWatched: !movie.isWatched,
+      }));
+    });
+
+    this._movieCardComponent.setFavoriteButtonClickHandler((evt) => {
+      evt.preventDefault();
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isFavorite: !movie.isFavorite,
+      }));
+    });
+
+    this._movieDetailsComponent.setSubmitHandler(closeMovieDetails);
+
+
+    // switch (mode) {
+    // case Mode.DEFAULT:
+    if (oldMovieCardComponent && oldMovieDetailsComponent) {
+      replace(this._movieCardComponent, oldMovieCardComponent);
+      replace(this._movieDetailsComponent, oldMovieDetailsComponent);
+      this._removeDetailsWithoutSaving();
+    } else {
+      render(this._cardContainer, this._movieCardComponent, RenderPosition.BEFOREEND);
     }
+    // break;
+    // }
+  }
 
-    render(movie) {
-        const oldMovieCardComponent = this._movieCardComponent;
-        const oldMoviePopupComponent = this._moviePopupComponent;
-
-        this._movieCardComponent = new FilmCardComponent(movie);
-        this._moviePopupComponent = new FilmPopupComponent(movie);
-
-        const onEscKeyDown = (evt) => {
-            const isEscKey = evt.keyCode === 27 || evt.key === `Esc`;
-
-            if (isEscKey) {
-                closeMoviePopup(evt);
-            }
-        };
-
-        const openMoviePopup = (evt) => {
-            evt.preventDefault();
-            this._onViewChange();
-            render(this._popupContainer, this._moviePopupComponent, RenderPosition.BEFOREEND);
-            this._mode = Mode.POPUP;
-            document.addEventListener(`keydown`, onEscKeyDown);
-        };
-
-        const closeMoviePopup = (evt) => {
-            evt.preventDefault();
-            const data = this._moviePopupComponent.getData();
-            this._onDataChange(this, movie, Object.assign({}, movie, data));
-            document.removeEventListener(`keydown`, onEscKeyDown);
-        };
-
-        this._movieCardComponent.filmCardClickHandler(openMoviePopup);
-
-
-        this._movieCardComponent.watchlistButtonClickHandler(() => {
-            this._onDataChange(this, movie, Object.assign({}, movie, {
-                isInWatchlist: !movie.isInWatchlist,
-            }));
-        });
-
-        this._movieCardComponent.watchedButtonClickHandler(() => {
-            this._onDataChange(this, movie, Object.assign({}, movie, {
-                isWatched: !movie.isWatched,
-            }));
-        });
-
-        this._movieCardComponent.favoriteButtonClickHandler(() => {
-            this._onDataChange(this, movie, Object.assign({}, movie, {
-                isFavorite: !movie.isFavorite,
-            }));
-        });
-        this._moviePopupComponent.setSubmitHandler(closeMoviePopup);
-
-        if (oldMovieCardComponent && oldMoviePopupComponent) {
-            replace(this._movieCardComponent, oldMovieCardComponent);
-            replace(this._moviePopupComponent, oldMoviePopupComponent);
-            this._removePopupWithoutSaving();
-        } else {
-            render(this._cardContainer, this._movieCardComponent, RenderPosition.BEFOREEND);
-        }
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._removeDetailsWithoutSaving();
     }
+  }
 
-    setDefaultView() {
-        if (this._mode !== Mode.DEFAULT) {
-            this._removePopupWithoutSaving();
-        }
-    }
+  // destroy() {
+  //   remove(this._movieDetailsComponent);
+  //   remove(this._movieCardComponent);
+  //   document.removeEventListener(`keydown`, this._onEscKeyDown);
+  // }
 
-    _removePopupWithoutSaving() {
-        this._moviePopupComponent.reset();
-        remove(this._moviePopupComponent);
-        this._moviePopupComponent.recoveryListeners();
-        this._mode = Mode.DEFAULT;
+  _removeDetailsWithoutSaving() {
+    this._movieDetailsComponent.reset();
 
-    }
+    remove(this._movieDetailsComponent);
+
+    this._movieDetailsComponent.recoveryListeners();
+    this._mode = Mode.DEFAULT;
+  }
 }

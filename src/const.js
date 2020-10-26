@@ -8,53 +8,65 @@ Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc an
 Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. 
 Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
-const filmTitles = [
-    `Made For Each Other`,
-    `Popeye Meets Sinbad`,
-    `Sagebrush Trail`,
-    `Santa Claus Conquers The Martians`,
-    `The Dance Of Life`,
-    `The Great Flamarion`,
-    `The Man With The Golden Arm`,
-];
-
-const genres = [
-    `Action`,
-    `Cartoon`,
-    `Comedy`,
-    `Crime`,
-    `Drama`,
-    `Fantasy`,
-    `Musical`,
-    `Romance`,
-    `Western`,
-];
-
-const emotions = [
-    `angry`,
-    `puke`,
-    `sleeping`,
-    `smile`,
-];
-
-const users = [
-    `Mike`,
-    `Pasha`,
-    `Amiran`,
-    `Marcus`,
-    `Prince`,
-    `Masha`,
-    `Denchik`,
-    `Anna`,
-    `John`,
-    `Max`,
-];
-
-const filterType = {
-    ALL: `All movies`,
-    WATCHLIST: `Watchlist`,
-    HISTORY: `History`,
-    FAVORITES: `Favorites`,
+const FilterType = {
+  ALL: `All movies`,
+  WATCHLIST: `Watchlist`,
+  HISTORY: `History`,
+  FAVORITES: `Favorites`,
+  STATS: `Stats`,
 };
 
-export { text, filmTitles, genres, users, emotions, filterType };
+const Genres = [
+  `Action`,
+  `Cartoon`,
+  `Comedy`,
+  `Crime`,
+  `Drama`,
+  `Fantasy`,
+  `Musical`,
+  `Romance`,
+  `Western`,
+];
+
+const FilmTitles = [
+  `Made For Each Other`,
+  `Popeye Meets Sinbad`,
+  `Sagebrush Trail`,
+  `Santa Claus Conquers The Martians`,
+  `The Dance Of Life`,
+  `The Great Flamarion`,
+  `The Man With The Golden Arm`,
+];
+
+
+const statsPeriods = {
+  ALL_TIME: `All time`,
+  TODAY: `Today`,
+  WEEK: `Week`,
+  MONTH: `Month`,
+  YEAR: `Year`,
+};
+
+const Emotions = [
+  `smile`,
+  `sleeping`,
+  `puke`,
+  `angry`,
+];
+
+const Users = [
+  `Mike`,
+  `Pasha`,
+  `Amiran`,
+  `Marcus`,
+  `Prince`,
+  `Masha`,
+  `Denchik`,
+  `Anna`,
+  `John`,
+  `Max`,
+];
+
+
+export { text, FilterType, statsPeriods, Emotions, Users, Genres, FilmTitles };
+
