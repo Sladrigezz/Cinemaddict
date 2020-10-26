@@ -50,4 +50,11 @@ const users = [
     `Max`,
 ];
 
-export { text, filmTitles, genres, users, emotions };
+const filterType = {
+    ALL: `All movies`,
+    WATCHLIST: `Watchlist`,
+    HISTORY: `History`,
+    FAVORITES: `Favorites`,
+};
+
+export { text, filmTitles, genres, users, emotions, filterType };

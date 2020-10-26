@@ -3,7 +3,7 @@ import FilmPopupComponent from './../components/film-details';
 import { RenderPosition, render, replace, remove } from './../utils/render';
 
 
-const Mode = {
+export const Mode = {
     DEFAULT: `default`,
     POPUP: `popup`,
 };
@@ -20,8 +20,6 @@ export default class MovieController {
 
         this._movieCardComponent = null;
         this._moviePopupComponent = null;
-
-        this._onEscKeyDown = this._onEscKeyDown.bind(this);
     }
 
     render(movie) {
@@ -31,20 +29,30 @@ export default class MovieController {
         this._movieCardComponent = new FilmCardComponent(movie);
         this._moviePopupComponent = new FilmPopupComponent(movie);
 
+        const onEscKeyDown = (evt) => {
+            const isEscKey = evt.keyCode === 27 || evt.key === `Esc`;
+
+            if (isEscKey) {
+                closeMoviePopup(evt);
+            }
+        };
+
         const openMoviePopup = (evt) => {
             evt.preventDefault();
-            this._renderPopup();
-            document.addEventListener(`keydown`, this._onEscKeyDown);
+            this._onViewChange();
+            render(this._popupContainer, this._moviePopupComponent, RenderPosition.BEFOREEND);
+            this._mode = Mode.POPUP;
+            document.addEventListener(`keydown`, onEscKeyDown);
         };
 
         const closeMoviePopup = (evt) => {
             evt.preventDefault();
-            this._removePopup();
-            document.removeEventListener(`keydown`, this._onEscKeyDown);
+            const data = this._moviePopupComponent.getData();
+            this._onDataChange(this, movie, Object.assign({}, movie, data));
+            document.removeEventListener(`keydown`, onEscKeyDown);
         };
 
         this._movieCardComponent.filmCardClickHandler(openMoviePopup);
-        this._moviePopupComponent.closePopupButtonClickHandler(closeMoviePopup);
 
 
         this._movieCardComponent.watchlistButtonClickHandler(() => {
@@ -64,11 +72,12 @@ export default class MovieController {
                 isFavorite: !movie.isFavorite,
             }));
         });
-
+        this._moviePopupComponent.setSubmitHandler(closeMoviePopup);
 
         if (oldMovieCardComponent && oldMoviePopupComponent) {
             replace(this._movieCardComponent, oldMovieCardComponent);
             replace(this._moviePopupComponent, oldMoviePopupComponent);
+            this._removePopupWithoutSaving();
         } else {
             render(this._cardContainer, this._movieCardComponent, RenderPosition.BEFOREEND);
         }
@@ -76,30 +85,15 @@ export default class MovieController {
 
     setDefaultView() {
         if (this._mode !== Mode.DEFAULT) {
-            this._removePopup();
+            this._removePopupWithoutSaving();
         }
     }
 
-    _removePopup() {
+    _removePopupWithoutSaving() {
         this._moviePopupComponent.reset();
-
         remove(this._moviePopupComponent);
+        this._moviePopupComponent.recoveryListeners();
         this._mode = Mode.DEFAULT;
-    }
 
-    _renderPopup() {
-        this._onViewChange();
-
-        render(this._popupContainer, this._moviePopupComponent, RenderPosition.BEFOREEND);
-        this._mode = Mode.POPUP;
-    }
-
-    _onEscKeyDown(evt) {
-        const isEscKey = evt.keyCode === 27 || evt.key === `Esc`;
-
-        if (isEscKey) {
-            this._removePopup();
-            document.removeEventListener(`keydown`, this._onEscKeyDown);
-        }
     }
 }
