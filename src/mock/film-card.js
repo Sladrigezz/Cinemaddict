@@ -41,9 +41,10 @@ const getRandomCommentDate = () => {
 const generateComment = () => {
   return {
     text: generateDescription(),
-    emotions: getRandomArrayItem(emotions),
+    emotion: getRandomArrayItem(emotions),
     author: getRandomArrayItem(users),
     date: getRandomCommentDate(),
+    id: String(new Date() + Math.random()),
   };
 };
 
@@ -58,9 +59,17 @@ const generateComments = () => {
   return result;
 };
 
+const generateRating = (userRating) => {
+  if (getRandomBooleanValue()) {
+    return getRandomRating();
+  }
+
+  return userRating || null;
+};
 
 const generateFilmCard = () => {
-  const rate = getRandomRating();
+  const userRating = getRandomBooleanValue() ? getRandomIntInclusive(1, 9) : null;
+  const rate = generateRating(userRating);
 
   return {
     title: getRandomArrayItem(filmTitles),
@@ -73,6 +82,8 @@ const generateFilmCard = () => {
     isWatched: getRandomBooleanValue(),
     isFavorite: getRandomBooleanValue(),
     comments: generateComments(),
+    userRating: isWatched ? userRating : null,
+    id: String(new Date() + Math.random()),
   };
 };
 

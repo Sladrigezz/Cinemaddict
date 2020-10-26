@@ -4,19 +4,19 @@ import AbstractComponent from './abstract-component';
 const userRanks = [
   {
     userRank: ``,
-    check: (watchedMovies) => watchedMovies === 0,
+    check: (watchedMovies) => watchedMovies.length === 0,
   },
   {
     userRank: `novice`,
-    check: (watchedMovies) => watchedMovies > 0 && watchedMovies <= 10,
+    check: (watchedMovies) => watchedMovies.length > 0 && watchedMovies.length <= 10,
   },
   {
     userRank: `fan`,
-    check: (watchedMovies) => watchedMovies > 10 && watchedMovies <= 20,
+    check: (watchedMovies) => watchedMovies.length > 10 && watchedMovies.length <= 20,
   },
   {
     userRank: `movie buff`,
-    check: (watchedMovies) => watchedMovies > 20,
+    check: (watchedMovies) => watchedMovies.length > 20,
   },
 ];
 

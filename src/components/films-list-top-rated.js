@@ -12,8 +12,4 @@ export default class FilmsListTopRated extends AbstractComponent {
   getTemplate() {
     return createFilmsListTopRatedTemplate();
   }
-
-  getSortedFilmsByRate(films) {
-    return films.slice().sort((a, b) => b.rate - a.rate);
-  }
 }
