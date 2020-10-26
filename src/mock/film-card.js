@@ -1,5 +1,58 @@
-import { text, Emotions, Users, Genres, FilmTitles } from '../const';
-import { getRandomArbitrary, getRandomIntInclusive, getRandomArrayItem, getRandomBooleanValue, getFileName, } from '../utils/common';
+import {text, Emotions} from '../const';
+import {
+  getRandomArbitrary,
+  getRandomIntInclusive,
+  getRandomArrayItem,
+  getRandomBooleanValue,
+  getFileName,
+} from '../utils/common';
+
+const FilmTitles = [
+  `Made For Each Other`,
+  `Popeye Meets Sinbad`,
+  `Sagebrush Trail`,
+  `Santa Claus Conquers The Martians`,
+  `the Dance Of Life`,
+  `the Great Flamarion`,
+  `the Man With The Glden Arm`
+];
+
+const Genres = [
+  `Cartoon`,
+  `Comedy`,
+  `Crime`,
+  `Drama`,
+  `Fantasy`,
+  `Romance`,
+  `Thriller`,
+  `Western`,
+];
+
+const Users = [
+  `Mike`,
+  `Paul`,
+  `Amiran`,
+  `Lizzzza`,
+  `Kate`,
+  `Anna`,
+  `Piter`,
+  `Hulk`,
+  `John`,
+  `Vandie`,
+];
+
+const Countries = [
+  `United States`,
+  `China`,
+  `India`,
+  `Japan`,
+  `United Kingdom`,
+  `South Korea`,
+  `France`,
+  `Germany`,
+  `Russia`,
+  `Australia`,
+];
 
 const threeDaysInMs = 1000 * 60 * 60 * 24 * 3;
 const hundredYears = 100;
@@ -21,15 +74,6 @@ const getRandomReleaseDate = () => {
   return targetDate.getTime();
 };
 
-const Countries = [
-  `United States`,
-  `Japan`,
-  `South Korea`,
-  `France`,
-  `Germany`,
-  `Russia`,
-  `Australia`,
-];
 
 const generateDescription = () => {
   const sentences = text
@@ -50,17 +94,17 @@ const generateDescription = () => {
 
 const generateItems = (arr) => arr
   .filter(getRandomBooleanValue)
-  .slice(0, getRandomIntInclusive(1, 3));
+  .slice(0, getRandomIntInclusive(1, 5));
 
 const generateComment = () => {
   return {
-
     author: getRandomArrayItem(Users),
-    date: getRandomDate(threeDaysInMs),
     text: generateDescription(),
+    date: getRandomDate(threeDaysInMs),
     emotion: getRandomArrayItem(Emotions),
   };
 };
+
 
 const gererateAllComments = () => {
   const commentsAmount = 100;
@@ -86,9 +130,11 @@ const generateCommentsForFilm = (amount) => {
       comments.push(commentId);
       reservedComments.push(commentId);
     }
-    return comments;
-  };
-}
+  }
+
+  return comments;
+};
+
 
 const generateFilm = () => {
   const title = getRandomArrayItem(FilmTitles);
@@ -115,7 +161,6 @@ const generateFilm = () => {
       description: generateDescription(),
     },
     userRating: isWatched ? userRating : null,
-
     isInWatchlist: getRandomBooleanValue(),
     isWatched,
     watchingDate: isWatched ? getRandomDate(yearInMs) : null,
@@ -134,7 +179,7 @@ const generateFilms = (count) => {
     films.push(film);
   }
 
-  return film;
+  return films;
 };
 
-export { generateFilm, generateFilms, allComments };
+export {generateFilm, generateFilms, allComments};

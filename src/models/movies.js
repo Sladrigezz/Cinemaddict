@@ -57,14 +57,17 @@ export default class Movies {
   }
 
   hasRatings() {
-    return this._movies.some((movie) => !!movie.filmInfo.totalRating);  }
+    return this._movies.some((movie) => !!movie.filmInfo.totalRating);
+  }
 
   hasComments() {
     return this._movies.some(({comments}) => !!comments.length);
   }
 
   getSortedMoviesByRating() {
-    return this._movies.slice().sort((a, b) => b.rating - a.rating);
+    return this._movies.slice().sort((a, b) => {
+      return b.filmInfo.totalRating - a.filmInfo.totalRating;
+    });
   }
 
   getSortedMoviesByCommentsCount() {

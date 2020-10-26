@@ -2,10 +2,14 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import 'chart.js/dist/Chart.min.css';
 import AbstractSmartComponent from './abstract-smart-component';
-import { getUserRank } from '../utils/user-rank';
-import { getWatchedMoviesByPeriod, getSortedGenres } from '../utils/stats';
-import { statsPeriods } from '../const';
-import { getHoursAndMinutes, convertTextToKebabCase, convertToTextFromKebabCase } from '../utils/common';
+import {getUserRank} from '../utils/user-rank';
+import {getWatchedMoviesByPeriod, getSortedGenres} from '../utils/stats';
+import {statsPeriods} from '../const';
+import {
+  getHoursAndMinutes,
+  convertTextToKebabCase,
+  convertToTextFromKebabCase
+} from '../utils/common';
 
 
 const createPeriodsMarkup = (activePeriod) => {
@@ -92,12 +96,12 @@ const renderChart = (ctx, watchedMovies, period) => {
 
 
 const createStatsTemplate = (watchedMovies, period) => {
-  const { userRank } = getUserRank(watchedMovies);
+  const {userRank} = getUserRank(watchedMovies);
 
   const watchedMoviesByPeriod = getWatchedMoviesByPeriod(watchedMovies, period);
 
   const watchedMoviesCount = watchedMoviesByPeriod.length;
-  const { hours, minutes } = getHoursAndMinutes(getTotalDuration(watchedMoviesByPeriod));
+  const {hours, minutes} = getHoursAndMinutes(getTotalDuration(watchedMoviesByPeriod));
   const topGenre = getTopGenre(watchedMoviesByPeriod);
 
   return `<section class="statistic">

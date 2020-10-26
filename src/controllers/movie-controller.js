@@ -1,13 +1,13 @@
+import he from 'he';
 import FilmCardComponent from '../components/film-card';
 import FilmDetailsComponent from '../components/film-details';
-import { RenderPosition, render, replace, remove } from '../utils/render';
 import MovieModel from '../models/movie';
-import he from 'he';
 import MovieCommentModel from '../models/movie-comment';
+import {RenderPosition, render, replace, remove} from '../utils/render';
+
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 const ERROR_COLOR = `red`;
-
 
 export const Mode = {
   DEFAULT: `default`,
@@ -36,7 +36,7 @@ export default class MovieController {
     this._movieDetailsComponent = new FilmDetailsComponent(movie);
 
     const onEscKeyDown = (evt) => {
-      const isEscKey = evt.keyCode === 27 || evt.key === `Esc`;
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
       if (isEscKey) {
         closeMovieDetails(evt);
@@ -89,6 +89,7 @@ export default class MovieController {
       if (!newMovie.isWatched) {
         newMovie.userRating = 0;
       }
+
       return this._onDataChange(this, movie, newMovie);
     };
 
@@ -105,7 +106,6 @@ export default class MovieController {
     this._movieCardComponent.setWatchedButtonClickHandler(watchedItemClickHandler);
     this._movieCardComponent.setFavoriteButtonClickHandler(favoriteItemClickHandler);
 
-
     this._movieDetailsComponent.setWatchlistItemClickHandler((evt) => {
       watchlistItemClickHandler(evt).then(() => openMovieDetails(evt));
     });
@@ -118,11 +118,13 @@ export default class MovieController {
       favoriteItemClickHandler(evt).then(() => openMovieDetails(evt));
     });
 
+
     this._movieDetailsComponent.setUserRatingClickHandler((evt) => {
       const userRatingInputs = this._movieDetailsComponent.getUserRatingInputs();
       userRatingInputs.forEach((input) => {
         input.disabled = true;
       });
+
       const userRating = +evt.target.value;
       const newMovie = MovieModel.clone(movie);
       newMovie.userRating = userRating;
@@ -140,6 +142,7 @@ export default class MovieController {
       this._onDataChange(this, movie, newMovie)
         .then(() => openMovieDetails(evt));
     });
+
     this._movieDetailsComponent.setDeleteCommentClickHandler((evt) => {
       evt.preventDefault();
       evt.target.textContent = `Deleting...`;
@@ -153,6 +156,7 @@ export default class MovieController {
         })
         .then(() => openMovieDetails(evt));
     });
+
     this._movieDetailsComponent.setSubmitCommentHandler((evt) => {
       if (evt.ctrlKey && evt.keyCode === 13) {
         const emotion = this._movieDetailsComponent.emotion;

@@ -1,5 +1,11 @@
 import AbstractComponent from './abstract-component';
-import { formatDuration, formatYear, createRatingText, convertTextToKebabCase, } from './../utils/common';
+import {
+  formatDuration,
+  formatYear,
+  createRatingText,
+  convertTextToKebabCase,
+} from './../utils/common';
+
 
 const maxDescriptionLength = 140;
 
@@ -15,6 +21,7 @@ const createDescriptionText = (description) => {
   if (description.length < maxDescriptionLength) {
     return description;
   }
+
   return `${description.slice(0, maxDescriptionLength - 3)}...`;
 };
 
@@ -36,6 +43,7 @@ const createMainGenreText = (genres) => {
 
   return genres[0];
 };
+
 
 const createFilmCardTemplate = (film) => {
   const {

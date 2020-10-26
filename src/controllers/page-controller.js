@@ -1,10 +1,10 @@
-import FilmsListTopRatedComponent from './../components/films-list-top-rated';
-import FilmsListMostCommentedComponent from './../components/films-list-top-commented';
+import FilmsListTopRatedComponent from '../components/films-list-top-rated';
+import FilmsListMostCommentedComponent from '../components/films-list-top-commented';
 import FilmListContainerComponent from '../components/film-list-container';
-import LoadMoreButtonComponent from './../components/show-more-button';
-import { RenderPosition, render, replace, remove } from '../utils/render';
-import { renderFilms } from '../utils/render-films';
-import { SortType } from './../components/sort-list';
+import LoadMoreButtonComponent from '../components/show-more-button';
+import {RenderPosition, render, replace, remove} from '../utils/render';
+import {renderFilms} from '../utils/render-films';
+import {SortType} from '../components/sort-list';
 
 
 const SHOWING_FILM_CARD_COUNT_ON_START = 5;
@@ -18,6 +18,7 @@ export default class PageController {
     this._sortComponent = sortComponent;
     this._moviesModel = moviesModel;
     this._api = api;
+
     this._films = [];
     this._allFilmsControllers = [];
     this._showingFilmCardCountByButton = SHOWING_FILM_CARD_COUNT_BY_BUTTON;
@@ -143,6 +144,7 @@ export default class PageController {
 
   _onDataChange(movieController, oldData, newData) {
     let movie;
+
     return this._api.updateMovie(oldData.id, newData)
       .then((movieData) => {
         movie = movieData;

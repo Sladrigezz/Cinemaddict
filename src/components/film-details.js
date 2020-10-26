@@ -1,6 +1,11 @@
 import AbstractSmartComponent from './abstract-smart-component';
-import { Emotions } from '../const';
-import { formatDuration, formatDate, formatRelativeTime, createRatingText, } from '../utils/common';
+import {Emotions} from '../const';
+import {
+  formatDuration,
+  formatDate,
+  formatRelativeTime,
+  createRatingText,
+} from '../utils/common';
 
 
 const createGenresMarkup = (genres) => genres
@@ -45,7 +50,7 @@ const createRatingScoreMarkup = (userRating) => {
 
 const createCommentsListMarkup = (comments) => comments
   .map((comment) => {
-    const { id, text, emotion, author, date } = comment;
+    const {id, text, emotion, author, date} = comment;
     return `<li class="film-details__comment" data-comment-id="${id}">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji">
@@ -104,6 +109,8 @@ const createFilmDetailsTemplate = (film, options = {}) => {
     description,
   } = filmInfo;
 
+  const {emotion, commentText} = options;
+
   const watchlistItem = createControlItemMarkup(`watchlist`, `Add to watchlist`, isInWatchlist);
   const watchedItem = createControlItemMarkup(`watched`, `Already watched`, isWatched);
   const favoriteItem = createControlItemMarkup(`favorite`, `Add to favorites`, isFavorite);
@@ -118,7 +125,7 @@ const createFilmDetailsTemplate = (film, options = {}) => {
           <div class="film-details__poster">
             <img class="film-details__poster-img" src="${poster}" alt="${title}">
 
-            <p class="film-details__age">${ageRating}</p>
+            <p class="film-details__age">${ageRating}+</p>
           </div>
 
           <div class="film-details__info">
@@ -232,8 +239,10 @@ export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
+
     this.emotion = null;
     this.commentText = null;
+
     this._watchlistItemClickHandler = null;
     this._watchedItemClickHandler = null;
     this._favoriteItemClickHandler = null;
@@ -242,6 +251,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._deleteCommentClickHandler = null;
     this._submitCommentHandler = null;
     this._closeButtonHandler = null;
+
     this._subscribeOnEvents();
   }
 
@@ -271,7 +281,6 @@ export default class FilmDetails extends AbstractSmartComponent {
   reset() {
     this.emotion = null;
     this.commentText = null;
-
     this.rerender();
   }
 
@@ -282,15 +291,17 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._watchlistItemClickHandler = handler;
   }
 
-  _setWatchedItemClickHandler(handler) {
+  setWatchedItemClickHandler(handler) {
     this.getElement().querySelector(`.film-details__control-label--watched`)
       .addEventListener(`click`, handler);
+
     this._watchedItemClickHandler = handler;
   }
 
   setFavoriteItemClickHandler(handler) {
     this.getElement().querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, handler);
+
     this._favoriteItemClickHandler = handler;
   }
 
@@ -317,12 +328,15 @@ export default class FilmDetails extends AbstractSmartComponent {
       .forEach((deleteButton) => {
         deleteButton.addEventListener(`click`, handler);
       });
+
     this._deleteCommentClickHandler = handler;
   }
+
   setSubmitCommentHandler(handler) {
     this.getElement().addEventListener(`keydown`, handler);
     this._submitCommentHandler = handler;
   }
+
   setCloseButtonHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
@@ -333,6 +347,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   getClosestComment(deleteCommentButton) {
     return deleteCommentButton.closest(`.film-details__comment`);
   }
+
   getCommentForm() {
     return this.getElement().querySelector(`.film-details__comment-input`);
   }
@@ -347,6 +362,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       this.emotion = emotion;
       this.rerender();
     });
+
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`input`, (evt) => {
       this.commentText = evt.target.value;
     });
