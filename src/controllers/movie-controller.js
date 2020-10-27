@@ -6,7 +6,7 @@ import MovieCommentModel from '../models/movie-comment';
 import {RenderPosition, render, replace, remove} from '../utils/render';
 
 
-const SHAKE_ANIMATION_TIMEOUT = 600;
+const SHAKE_ANIMATION_TIMEOUT = 500;
 const ERROR_COLOR = `red`;
 
 export const Mode = {
@@ -206,7 +206,6 @@ export default class MovieController {
 
     setTimeout(() => {
       commentForm.style.animation = ``;
-      commentForm.style.animation = ``;
       commentForm.style.borderColor = currentBorderColor;
       commentForm.disabled = false;
       commentForm.focus();
@@ -222,7 +221,6 @@ export default class MovieController {
     ratingLabel.style.backgroundColor = ERROR_COLOR;
 
     setTimeout(() => {
-      ratingLabel.style.animation = ``;
       ratingLabel.style.animation = ``;
       ratingLabel.style.backgroundColor = currentItemColor;
       element.checked = false;

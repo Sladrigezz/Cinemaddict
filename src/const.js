@@ -21,6 +21,7 @@ const Emotions = [
   `sleeping`,
   `puke`,
   `angry`,
+  `trophy`
 ];
 
 
