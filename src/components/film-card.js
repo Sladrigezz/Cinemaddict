@@ -28,7 +28,7 @@ const createDescriptionText = (description) => {
 const createCommentsTitleText = (comments) => {
   switch (comments.length) {
     case 0:
-      return `no comments yet`;
+      return `no comments`;
     case 1:
       return `1 comment`;
     default:

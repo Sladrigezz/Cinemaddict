@@ -182,4 +182,4 @@ const generateFilms = (count) => {
   return films;
 };
 
-export {generateFilm, generateFilms, allComments};
+export {generateFilm, generateFilms, allComments, Users};
