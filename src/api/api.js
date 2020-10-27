@@ -8,7 +8,6 @@ const Method = {
   PUT: `PUT`,
   DELETE: `DELETE`
 };
-
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -16,20 +15,16 @@ const checkStatus = (response) => {
     throw new Error(`${response.status}: ${response.statusText}`);
   }
 };
-
-
 export default class API {
   constructor(endPoint, authorization) {
     this._endPoint = endPoint;
     this._authorization = authorization;
   }
-
   getMovies() {
     return this._load({ url: `movies` })
       .then((response) => response.json())
       .then(Movie.parseMovies);
   }
-
   updateMovie(id, data) {
     return this._load({
       url: `movies/${id}`,
@@ -40,7 +35,6 @@ export default class API {
       .then((response) => response.json())
       .then(Movie.parseMovie);
   }
-
   getComments(movieId) {
     return this._load({ url: `comments/${movieId}` })
       .then((response) => response.json())

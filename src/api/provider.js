@@ -1,4 +1,4 @@
-import nanoid from 'nanoid';
+import { nanoid } from 'nanoid';
 import Movie from '../models/movie';
 import MovieComment from '../models/movie-comment';
 import { getRandomArrayItem } from '../utils/common';
