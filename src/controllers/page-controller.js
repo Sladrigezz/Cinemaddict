@@ -1,10 +1,10 @@
-import FilmsListTopRatedComponent from './../components/films-list-top-rated';
-import FilmsListMostCommentedComponent from './../components/films-list-top-commented';
+import FilmsListTopRatedComponent from '../components/films-list-top-rated';
+import FilmsListMostCommentedComponent from '../components/films-list-top-commented';
 import FilmListContainerComponent from '../components/film-list-container';
-import LoadMoreButtonComponent from './../components/show-more-button';
+import LoadMoreButtonComponent from '../components/show-more-button';
 import {RenderPosition, render, replace, remove} from '../utils/render';
 import {renderFilms} from '../utils/render-films';
-import {SortType} from './../components/sort-list';
+import {SortType} from '../components/sort-list';
 
 
 const SHOWING_FILM_CARD_COUNT_ON_START = 5;
@@ -13,10 +13,11 @@ const SHOWING_FILM_CARD_COUNT_BY_EXTRA = 2;
 
 
 export default class PageController {
-  constructor(filmsComponent, sortComponent, moviesModel) {
+  constructor(filmsComponent, sortComponent, moviesModel, api) {
     this._filmsComponent = filmsComponent;
     this._sortComponent = sortComponent;
     this._moviesModel = moviesModel;
+    this._api = api;
 
     this._films = [];
     this._allFilmsControllers = [];
@@ -112,7 +113,7 @@ export default class PageController {
   _renderFilms(container, films) {
     const filmsElement = this._filmsComponent.getElement();
 
-    const newFilms = renderFilms(container, filmsElement, films, this._onDataChange, this._onViewChange);
+    const newFilms = renderFilms(container, filmsElement, films, this._onDataChange, this._onViewChange, this._api);
     this._allFilmsControllers = this._allFilmsControllers.concat(newFilms);
   }
 
@@ -142,14 +143,25 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    const isSuccess = this._moviesModel.updateMovie(oldData.id, newData);
+    let movie;
 
-    if (isSuccess) {
-      movieController.render(newData);
-    }
+    return this._api.updateMovie(oldData.id, newData)
+      .then((movieData) => {
+        movie = movieData;
+      })
+      .then(() => this._api.getComments(movie.id))
+      .then((comments) => {
+        movie.comments = comments;
 
-    this.renderTopRatedList();
-    this.renderMostCommentedList();
+        const isSuccess = this._moviesModel.updateMovie(oldData.id, movie);
+
+        if (isSuccess) {
+          movieController.render(movie);
+        }
+
+        this.renderTopRatedList();
+        this.renderMostCommentedList();
+      });
   }
 
   _onViewChange() {
@@ -163,11 +175,13 @@ export default class PageController {
     switch (sortType) {
       case SortType.DATE:
         sortedFilms = films.slice().sort((a, b) => {
-          return new Date(b.releaseDate) - new Date(a.releaseDate);
+          return new Date(b.filmInfo.releaseDate) - new Date(a.filmInfo.releaseDate);
         });
         break;
       case SortType.RATING:
-        sortedFilms = films.slice().sort((a, b) => b.rating - a.rating);
+        sortedFilms = films.slice().sort((a, b) => {
+          return b.filmInfo.totalRating - a.filmInfo.totalRating;
+        });
         break;
       case SortType.DEFAULT:
         sortedFilms = films.slice();
