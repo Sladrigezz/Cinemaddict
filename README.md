@@ -2,11 +2,9 @@
 
 
 Для установки пакетов npm//Install npm-packages:
-
 npm i
 
 
 Для запуска сервера//Run dev-server:
-
 npm start
 
